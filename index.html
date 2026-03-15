@@ -180,52 +180,44 @@
       color: var(--text-light);
     }
 
-    /* ── Nav ── */
-    .sidebar-nav {
-      list-style: none;
-      margin-bottom: 4px;
-    }
-
-    .sidebar-nav li {
-      margin-bottom: 2px;
-    }
-
-    .sidebar-nav a {
-      font-size: 13px;
-      color: var(--text-mid);
-      text-decoration: none;
+    /* ── Download CV button ── */
+    .cv-download-btn {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 7px;
-      transition: background 0.18s, color 0.18s;
-    }
-
-    .sidebar-nav a .nav-icon {
-      width: 16px;
-      height: 16px;
-      opacity: 0.55;
-      flex-shrink: 0;
-    }
-
-    .sidebar-nav a:hover {
-      background: var(--bg);
-      color: var(--accent-dark);
-    }
-
-    .sidebar-nav a:hover .nav-icon {
-      opacity: 1;
-    }
-
-    .sidebar-nav a.active {
-      background: linear-gradient(90deg, rgba(200, 169, 110, 0.12), transparent);
-      color: var(--accent-dark);
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      padding: 11px 16px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
       font-weight: 500;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(168, 136, 74, 0.35);
+      transition: all 0.25s;
+      margin-top: auto;
     }
 
-    .sidebar-nav a.active .nav-icon {
-      opacity: 1;
+    .cv-download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(168, 136, 74, 0.45);
+      filter: brightness(1.05);
+    }
+
+    .cv-download-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(168, 136, 74, 0.3);
+    }
+
+    .cv-download-btn svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
     }
 
     /* ── Social links ── */
@@ -629,9 +621,6 @@
 
     <hr class="sidebar-divider">
 
-    <!-- Navigation -->
-
-
     <!-- Social Links -->
     <div class="sidebar-social-label">Connect with me</div>
     <div class="sidebar-social">
@@ -695,7 +684,7 @@
         <span class="social-arrow">→</span>
       </a>
 
-      <a href="mailto:your@email.com" class="social-link">
+      <a href="/cdn-cgi/l/email-protection#5821372d2a183d35393134763b3735" class="social-link">
         <span class="social-icon-img">
           <svg viewBox="0 0 18 18" width="18" height="18">
             <rect width="18" height="18" rx="3" fill="#EA4335" />
@@ -712,11 +701,8 @@
     <hr class="sidebar-divider">
 
     <!-- Download CV Button -->
-    <!--
-    Ganti href="..." dengan path file CV Anda, misal: href="cv/yourname-cv.pdf"
-    Atribut download="NamaFile.pdf" menentukan nama file saat diunduh.
-  -->
-    <a href="your-cv.pdf" download="YourName_CV.pdf" class="cv-download-btn">
+    <!-- Ganti href="..." dengan path file CV kamu, misal: href="cv/rayzan-cv.pdf" -->
+    <a href="your-cv.pdf" download="Rayzan_Fazri_CV.pdf" class="cv-download-btn">
       <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
         stroke-linejoin="round">
         <path d="M7.5 2v8M4.5 7.5l3 3 3-3" />
@@ -725,7 +711,7 @@
       Download My CV
     </a>
 
-    <p class="sidebar-footer">©2025 Your Name · All rights reserved</p>
+    <p class="sidebar-footer">©2025 Rayzan Fazri Ramdany · All rights reserved</p>
   </aside>
 
   <!-- ── MAIN ── -->
@@ -738,7 +724,7 @@
     <div class="portfolio-rows" id="portfolioRows"></div>
   </main>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ─────────────────────────────────────────────
     // EDIT THIS ARRAY to add/change your portfolio
     // ─────────────────────────────────────────────
@@ -820,5 +806,4 @@
     render();
   </script>
 </body>
-
 </html>
