@@ -539,30 +539,65 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
+      body {
+        flex-direction: column;
+      }
+
       .sidebar {
-        display: none;
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        order: 2;
+        /* Memindahkan sidebar ke bawah konten utama */
       }
 
       .main {
         padding: 24px 20px 60px;
+        width: 100%;
+        order: 1;
+        /* Konten utama tampil lebih dulu di atas */
+      }
+
+      .portfolio-row {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .row-up,
+      .row-down {
+        animation: none;
+        /* Mematikan animasi naik-turun di mode HP agar tata letak rapi */
       }
 
       :root {
-        --card-w: 160px;
-        --card-h: 240px;
-        --img-h: 110px;
+        --card-w: calc(50% - 10px);
+        /* 2 Kolom untuk tampilan tablet */
+        --card-h: 260px;
+        --img-h: 130px;
       }
     }
 
     @media (max-width: 600px) {
       :root {
-        --card-w: 140px;
-        --card-h: 220px;
-        --img-h: 100px;
+        --card-w: 100%;
+        /* Kartu menjadi 1 baris penuh di layar HP */
+        --card-h: auto;
+        --img-h: 180px;
+      }
+
+      .card {
+        min-width: 100%;
+      }
+
+      .card-body {
+        padding: 16px 14px;
       }
 
       .portfolio-row {
-        gap: 12px;
+        gap: 16px;
       }
     }
   </style>
@@ -580,7 +615,7 @@
       Jika tidak ada foto, hapus tag <img> dan aktifkan .profile-photo-placeholder.
     -->
       <img class="profile-photo"
-        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
+        src="https://image2url.com/r2/default/images/1773616856637-f0e48712-9355-4e9a-82b8-e989a1ce314d.png"
         alt="Profile photo">
       <!--
     <div class="profile-photo-placeholder">Y</div>
@@ -606,7 +641,7 @@
     <!-- Stats -->
     <div class="sidebar-stats">
       <div class="stat-chip">
-        <span class="stat-num">12</span>
+        <span id="project-count" class="stat-num">0</span>
         <span class="stat-label">Projects</span>
       </div>
       <div class="stat-chip">
@@ -625,7 +660,8 @@
     <div class="sidebar-social-label">Connect with me</div>
     <div class="sidebar-social">
 
-      <a href="https://linkedin.com/in/yourprofile" class="social-link" target="_blank" rel="noopener">
+      <a href="https://www.linkedin.com/in/rayzan-fazri-ramdany-190063291/" class="social-link" target="_blank"
+        rel="noopener">
         <span class="social-icon-img">
           <!-- LinkedIn blue -->
           <svg viewBox="0 0 18 18" width="18" height="18">
@@ -638,7 +674,8 @@
         <span class="social-arrow">→</span>
       </a>
 
-      <a href="https://instagram.com/yourhandle" class="social-link" target="_blank" rel="noopener">
+      <a href="https://www.instagram.com/rayzan3_0?igsh=NXdrdTRzcDRyazFt" class="social-link" target="_blank"
+        rel="noopener">
         <span class="social-icon-img">
           <!-- Instagram gradient -->
           <svg viewBox="0 0 18 18" width="18" height="18">
@@ -660,7 +697,7 @@
         <span class="social-arrow">→</span>
       </a>
 
-      <a href="https://github.com/yourusername" class="social-link" target="_blank" rel="noopener">
+      <a href="https://github.com/Janlearns" class="social-link" target="_blank" rel="noopener">
         <span class="social-icon-img">
           <svg viewBox="0 0 18 18" width="18" height="18">
             <rect width="18" height="18" rx="3" fill="#24292e" />
@@ -673,18 +710,7 @@
         <span class="social-arrow">→</span>
       </a>
 
-      <a href="https://twitter.com/yourhandle" class="social-link" target="_blank" rel="noopener">
-        <span class="social-icon-img">
-          <svg viewBox="0 0 18 18" width="18" height="18">
-            <rect width="18" height="18" rx="3" fill="#000" />
-            <path d="M4 4h2.5l2.25 3L11.5 4H14l-4 5 4 5h-2.5L9.25 10.5 6.5 14H4l4-5-4-5z" fill="#fff" />
-          </svg>
-        </span>
-        <span class="social-handle">X / Twitter</span>
-        <span class="social-arrow">→</span>
-      </a>
-
-      <a href="/cdn-cgi/l/email-protection#5821372d2a183d35393134763b3735" class="social-link">
+      <div class="social-link">
         <span class="social-icon-img">
           <svg viewBox="0 0 18 18" width="18" height="18">
             <rect width="18" height="18" rx="3" fill="#EA4335" />
@@ -692,26 +718,24 @@
             <path d="M3 5l6 5 6-5" stroke="#fff" stroke-width="1.2" fill="none" />
           </svg>
         </span>
-        <span class="social-handle">Email</span>
-        <span class="social-arrow">→</span>
+        <span class="social-handle">rayzan935@gmail.com</span>
+      </div>
+
+      <hr class="sidebar-divider">
+
+      <!-- Download CV Button -->
+      <!-- Ganti href="..." dengan path file CV kamu, misal: href="cv/rayzan-cv.pdf" -->
+      <a href="https://drive.google.com/file/d/1KUKcEr6nwxW1TWPKVkF8YeatVU7nuk2k/view?usp=sharing"
+        download="Rayzan_Fazri_CV.pdf" class="cv-download-btn">
+        <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M7.5 2v8M4.5 7.5l3 3 3-3" />
+          <path d="M2 11v1.5A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V11" />
+        </svg>
+        See My CV
       </a>
 
-    </div>
-    
-    <hr class="sidebar-divider">
-
-    <!-- Download CV Button -->
-    <!-- Ganti href="..." dengan path file CV kamu, misal: href="cv/rayzan-cv.pdf" -->
-    <a href="your-cv.pdf" download="Rayzan_Fazri_CV.pdf" class="cv-download-btn">
-      <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-        stroke-linejoin="round">
-        <path d="M7.5 2v8M4.5 7.5l3 3 3-3" />
-        <path d="M2 11v1.5A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V11" />
-      </svg>
-      Download My CV
-    </a>
-
-    <p class="sidebar-footer">©2025 Rayzan Fazri Ramdany · All rights reserved</p>
+      <p class="sidebar-footer">©2025 Rayzan Fazri Ramdany · All rights reserved</p>
   </aside>
 
   <!-- ── MAIN ── -->
@@ -724,17 +748,46 @@
     <div class="portfolio-rows" id="portfolioRows"></div>
   </main>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script>
     // ─────────────────────────────────────────────
     // EDIT THIS ARRAY to add/change your portfolio
     // ─────────────────────────────────────────────
     const portfolios = [
       {
         title: "Bank Churn Prediction",
-        category: "Open Data",
-        description: "bank churn prediksi menggunakan model XGboost dan random forest.",
+        category: "Prediction",
+        description: "bank churn prediksi menggunakan model XGboost dan random forest untuk mengidentifikasi kemungkinan nasabah berhenti menggunakan layanan bank berdasarkan pola data pelanggan.",
         image: "https://th.bing.com/th/id/OIP.LYHzqIMKNO1742iwEkKvfAHaEK?w=293&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
-        link: "file:///F:/downloads/Banking_Retention_Intelligence.pdf"
+        link: "https://drive.google.com/file/d/17mLH-vkJK4ChsrS91WxbgQu00wva_KpA/view?usp=sharing"
+      },
+      {
+        title: "Phone Price Prediction",
+        category: "Prediction",
+        description: "memprediksi harga smartphone berdasarkan spesifikasi seperti RAM, storage, kamera, dan fitur lainnya menggunakan teknik machine learning.",
+        image: "https://th.bing.com/th/id/OIP.4OYWnhVW-KBGlQfjk4IAfwHaEs?w=241&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/1dXHjuUpvANFbm_jFCQg4p61nSQu9Xfrt/view?usp=drive_link"
+      },
+      {
+        title: "Convolutional Neural Network",
+        category: "Model",
+        description: "merupakan arsitektur CNN yang digunakan untuk memahami cara kerja convolutional layer, pooling layer, dan proses ekstraksi fitur pada data gambar.",
+        image: "https://th.bing.com/th/id/OIP.AovBM3nLjKFL8SexWcYydAHaCd?w=334&h=116&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/1GfJDa8IY-O3r0MwDg-hQ8P3g3BVNhfwM/view?usp=sharing"
+      },
+      {
+        title: "Prediksi Harga Mobil",
+        category: "Prediction",
+        description: "memprediksi harga mobil berdasarkan fitur seperti tahun produksi, tipe kendaraan, kapasitas mesin, dan kondisi kendaraan menggunakan model regresi.",
+        image: "https://th.bing.com/th/id/OIP.Aow260ppzEzBwoBTBNn53wHaE7?w=272&h=181&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/1PMJJqy0cS1NYE1FYB7-LJ4vTt3Ulkckj/view?usp=sharing"
+      },
+      {
+        title: "LSTM project",
+        category: "Model",
+        description: "mempelajari arsitektur LSTM untuk memahami cara model deep learning memproses data sequential seperti teks atau time series.",
+        image: "https://th.bing.com/th/id/OIP.46vRqaIYX_HIdwpeDT9RdQHaEc?w=286&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/114JR1DrR9uEsQy7tfBK_dvMwIWk6gKta/view?usp=sharing"
       }
     ];
 
@@ -803,7 +856,12 @@
       }
     }
 
+    // Update project count automatically based on the portfolio array length
+    const projectCountElement = document.getElementById('project-count');
+    if (projectCountElement) projectCountElement.textContent = portfolios.length;
+
     render();
   </script>
 </body>
+
 </html>
