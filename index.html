@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f2ed;
+      --sidebar-bg: #ffffff;
+      --accent: #c8a96e;
+      --accent-dark: #a8884a;
+      --text-dark: #1a1a1a;
+      --text-mid: #555555;
+      --text-light: #888888;
+      --card-bg: #ffffff;
+      --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      --card-hover-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      --border: #e8e4de;
+      --card-w: 200px;
+      --card-h: 280px;
+      --img-h: 140px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      padding: 36px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    /* ── Profile photo ── */
+    .profile-photo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-photo {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--border);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      display: block;
+    }
+
+    .profile-photo:hover {
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(200, 169, 110, 0.25);
+    }
+
+    /* Placeholder avatar when no photo */
+    .profile-photo-placeholder {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      color: #fff;
+      border: 3px solid var(--border);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+      user-select: none;
+    }
+
+    /* ── Name & role ── */
+    .profile-info {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1.25;
+      margin-bottom: 5px;
+    }
+
+    .sidebar-role {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-tagline {
+      font-size: 11.5px;
+      color: var(--text-mid);
+      line-height: 1.65;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    /* ── Divider ── */
+    .sidebar-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── Bio / stats ── */
+    .sidebar-bio {
+      font-size: 12px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-stats {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .stat-chip {
+      flex: 1;
+      text-align: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 4px;
+    }
+
+    .stat-chip .stat-num {
+      display: block;
+      font-family: 'DM Serif Display', serif;
+      font-size: 16px;
+      color: var(--text-dark);
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    .stat-chip .stat-label {
+      display: block;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    /* ── Download CV button ── */
+    .cv-download-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      padding: 11px 16px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(168, 136, 74, 0.35);
+      transition: all 0.25s;
+      margin-top: auto;
+    }
+
+    .cv-download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(168, 136, 74, 0.45);
+      filter: brightness(1.05);
+    }
+
+    .cv-download-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(168, 136, 74, 0.3);
+    }
+
+    .cv-download-btn svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    /* ── Social links ── */
+    .sidebar-social-label {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    .sidebar-social {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text-mid);
+      font-size: 12.5px;
+      font-weight: 400;
+      transition: all 0.2s;
+      background: transparent;
+    }
+
+    .social-link:hover {
+      border-color: var(--accent);
+      color: var(--text-dark);
+      background: rgba(200, 169, 110, 0.06);
+      transform: translateX(2px);
+    }
+
+    .social-link .social-icon-img {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    .social-link .social-handle {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .social-link .social-arrow {
+      font-size: 10px;
+      opacity: 0.35;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .social-link:hover .social-arrow {
+      opacity: 0.8;
+      transform: translateX(2px);
+    }
+
+    /* ── Footer ── */
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      font-size: 10px;
+      color: var(--text-light);
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      flex: 1;
+      padding: 40px 40px 80px;
+      overflow: hidden;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text-dark);
+      letter-spacing: 0.01em;
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    /* ── PORTFOLIO ROWS ── */
+    .portfolio-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .portfolio-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: nowrap;
+    }
+
+    /* Alternating vertical animation */
+    @keyframes floatUp {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes floatDown {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(10px);
+      }
+    }
+
+    .row-up {
+      animation: floatUp 8s ease-in-out infinite;
+    }
+
+    .row-down {
+      animation: floatDown 8s ease-in-out infinite;
+    }
+
+    /* Stagger rows so they don't all move together */
+    .portfolio-row:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .portfolio-row:nth-child(2) {
+      animation-delay: -2s;
+    }
+
+    .portfolio-row:nth-child(3) {
+      animation-delay: -4s;
+    }
+
+    .portfolio-row:nth-child(4) {
+      animation-delay: -6s;
+    }
+
+    /* ── CARD ── */
+    .card {
+      width: var(--card-w);
+      min-width: var(--card-w);
+      height: var(--card-h);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+      position: relative;
+    }
+
+    .card:hover {
+      box-shadow: var(--card-hover-shadow);
+      transform: translateY(-4px) scale(1.02);
+      border-color: var(--accent);
+      z-index: 10;
+    }
+
+    .card-img-wrap {
+      width: 100%;
+      height: var(--img-h);
+      min-height: var(--img-h);
+      overflow: hidden;
+      background: #e8e4de;
+      position: relative;
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      display: block;
+    }
+
+    .card:hover .card-img-wrap img {
+      transform: scale(1.06);
+    }
+
+    /* Overlay on hover */
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(200, 169, 110, 0.15) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover .card-overlay {
+      opacity: 1;
+    }
+
+    .card-body {
+      padding: 12px 14px 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .card-category {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      margin-bottom: 5px;
+    }
+
+    .card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1.3;
+      margin-bottom: 6px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      color: var(--text-mid);
+      line-height: 1.5;
+      font-weight: 300;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    .card-arrow {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      width: 22px;
+      height: 22px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .card-arrow svg {
+      width: 10px;
+      height: 10px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+
+    /* Placeholder when no image */
+    .card-img-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #e8e0d4, #d4ccc0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      font-size: 11px;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      color: var(--text-light);
+      font-size: 13px;
+      padding: 40px 0;
+      font-style: italic;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        order: 2;
+        /* Memindahkan sidebar ke bawah konten utama */
+      }
+
+      .main {
+        padding: 24px 20px 60px;
+        width: 100%;
+        order: 1;
+        /* Konten utama tampil lebih dulu di atas */
+      }
+
+      .portfolio-row {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .row-up,
+      .row-down {
+        animation: none;
+        /* Mematikan animasi naik-turun di mode HP agar tata letak rapi */
+      }
+
+      :root {
+        --card-w: calc(50% - 10px);
+        /* 2 Kolom untuk tampilan tablet */
+        --card-h: 260px;
+        --img-h: 130px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      :root {
+        --card-w: 100%;
+        /* Kartu menjadi 1 baris penuh di layar HP */
+        --card-h: auto;
+        --img-h: 180px;
+      }
+
+      .card {
+        min-width: 100%;
+      }
+
+      .card-body {
+        padding: 16px 14px;
+      }
+
+      .portfolio-row {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <!-- Profile Photo -->
+    <div class="profile-photo-wrap">
+      <!--
+      Ganti src di bawah dengan URL foto Anda.
+      Jika tidak ada foto, hapus tag <img> dan aktifkan .profile-photo-placeholder.
+    -->
+      <img class="profile-photo"
+        src="https://image2url.com/r2/default/images/1773616856637-f0e48712-9355-4e9a-82b8-e989a1ce314d.png"
+        alt="Profile photo">
+      <!--
+    <div class="profile-photo-placeholder">Y</div>
+    -->
+    </div>
+
+    <!-- Name & Role -->
+    <div class="profile-info">
+      <div class="sidebar-name">Rayzan Fazri Ramdany</div>
+      <div class="sidebar-role">Data Scientist | Machine Learning | AI engineer</div>
+      <p class="sidebar-tagline">Exploring AI, building models,<br>and solving real problems.</p>
+    </div>
+
+    <hr class="sidebar-divider">
+
+    <!-- Short Bio -->
+    <p class="sidebar-bio">
+      Passionate about building intelligent systems that understand human language.
+      Currently focusing on Natural Language Processing and Large Language Models.
+      Based in bandung, Indonesia 🇮🇩
+    </p>
+
+    <!-- Stats -->
+    <div class="sidebar-stats">
+      <div class="stat-chip">
+        <span id="project-count" class="stat-num">0</span>
+        <span class="stat-label">Projects</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-num">-</span>
+        <span class="stat-label">Years</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-num">5</span>
+        <span class="stat-label">Skills</span>
+      </div>
+    </div>
+
+    <hr class="sidebar-divider">
+
+    <!-- Social Links -->
+    <div class="sidebar-social-label">Connect with me</div>
+    <div class="sidebar-social">
+
+      <a href="https://www.linkedin.com/in/rayzan-fazri-ramdany-190063291/" class="social-link" target="_blank"
+        rel="noopener">
+        <span class="social-icon-img">
+          <!-- LinkedIn blue -->
+          <svg viewBox="0 0 18 18" width="18" height="18">
+            <rect width="18" height="18" rx="3" fill="#0077B5" />
+            <path d="M5.5 7.5v5M5.5 5.5v.01M8.5 7.5v5M8.5 10a2 2 0 014 0v2.5" stroke="#fff" stroke-width="1.4"
+              stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="social-handle">LinkedIn</span>
+        <span class="social-arrow">→</span>
+      </a>
+
+      <a href="https://www.instagram.com/rayzan3_0?igsh=NXdrdTRzcDRyazFt" class="social-link" target="_blank"
+        rel="noopener">
+        <span class="social-icon-img">
+          <!-- Instagram gradient -->
+          <svg viewBox="0 0 18 18" width="18" height="18">
+            <rect width="18" height="18" rx="4" fill="url(#ig)" />
+            <defs>
+              <linearGradient id="ig" x1="0" y1="18" x2="18" y2="0">
+                <stop offset="0%" stop-color="#f09433" />
+                <stop offset="25%" stop-color="#e6683c" />
+                <stop offset="50%" stop-color="#dc2743" />
+                <stop offset="75%" stop-color="#cc2366" />
+                <stop offset="100%" stop-color="#bc1888" />
+              </linearGradient>
+            </defs>
+            <circle cx="9" cy="9" r="3.5" stroke="#fff" stroke-width="1.4" fill="none" />
+            <circle cx="13" cy="5" r=".8" fill="#fff" />
+          </svg>
+        </span>
+        <span class="social-handle">Instagram</span>
+        <span class="social-arrow">→</span>
+      </a>
+
+      <a href="https://github.com/Janlearns" class="social-link" target="_blank" rel="noopener">
+        <span class="social-icon-img">
+          <svg viewBox="0 0 18 18" width="18" height="18">
+            <rect width="18" height="18" rx="3" fill="#24292e" />
+            <path
+              d="M9 3a6 6 0 00-1.897 11.693c.3.056.41-.13.41-.288v-1.02c-1.668.363-2.02-.806-2.02-.806-.272-.693-.665-.877-.665-.877-.544-.372.041-.365.041-.365.601.042.918.617.918.617.534.916 1.4.651 1.741.498.054-.387.209-.651.38-.8-1.332-.152-2.732-.666-2.732-2.965 0-.655.234-1.19.617-1.61-.062-.152-.267-.762.058-1.588 0 0 .503-.161 1.648.614a5.74 5.74 0 011.5-.202c.509.002 1.021.069 1.5.202 1.145-.775 1.647-.614 1.647-.614.326.826.121 1.436.06 1.588.384.42.616.955.616 1.61 0 2.306-1.403 2.812-2.74 2.96.216.185.408.552.408 1.113v1.648c0 .16.109.347.413.288A6.001 6.001 0 009 3z"
+              fill="#fff" />
+          </svg>
+        </span>
+        <span class="social-handle">GitHub</span>
+        <span class="social-arrow">→</span>
+      </a>
+
+      <div class="social-link">
+        <span class="social-icon-img">
+          <svg viewBox="0 0 18 18" width="18" height="18">
+            <rect width="18" height="18" rx="3" fill="#EA4335" />
+            <path d="M3 5h12v8H3z" stroke="#fff" stroke-width="1.2" fill="none" />
+            <path d="M3 5l6 5 6-5" stroke="#fff" stroke-width="1.2" fill="none" />
+          </svg>
+        </span>
+        <span class="social-handle">rayzan935@gmail.com</span>
+      </div>
+
+      <hr class="sidebar-divider">
+
+      <!-- Download CV Button -->
+      <!-- Ganti href="..." dengan path file CV kamu, misal: href="cv/rayzan-cv.pdf" -->
+      <a href="https://drive.google.com/file/d/1KUKcEr6nwxW1TWPKVkF8YeatVU7nuk2k/view?usp=sharing"
+        download="Rayzan_Fazri_CV.pdf" class="cv-download-btn">
+        <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M7.5 2v8M4.5 7.5l3 3 3-3" />
+          <path d="M2 11v1.5A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V11" />
+        </svg>
+        See My CV
+      </a>
+
+      <p class="sidebar-footer">©2025 Rayzan Fazri Ramdany · All rights reserved</p>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+    <div class="page-header">
+      <h1>Portfolio</h1>
+      <p>A collection of projects, experiments, and explorations.</p>
+    </div>
+
+    <div class="portfolio-rows" id="portfolioRows"></div>
+  </main>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script>
+    // ─────────────────────────────────────────────
+    // EDIT THIS ARRAY to add/change your portfolio
+    // ─────────────────────────────────────────────
+    const portfolios = [
+      {
+        title: "Bank Churn Prediction",
+        category: "Prediction",
+        description: "bank churn prediksi menggunakan model XGboost dan random forest untuk mengidentifikasi kemungkinan nasabah berhenti menggunakan layanan bank berdasarkan pola data pelanggan.",
+        image: "https://th.bing.com/th/id/OIP.LYHzqIMKNO1742iwEkKvfAHaEK?w=293&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/17mLH-vkJK4ChsrS91WxbgQu00wva_KpA/view?usp=sharing"
+      },
+      {
+        title: "Phone Price Prediction",
+        category: "Prediction",
+        description: "memprediksi harga smartphone berdasarkan spesifikasi seperti RAM, storage, kamera, dan fitur lainnya menggunakan teknik machine learning.",
+        image: "https://th.bing.com/th/id/OIP.4OYWnhVW-KBGlQfjk4IAfwHaEs?w=241&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/1dXHjuUpvANFbm_jFCQg4p61nSQu9Xfrt/view?usp=drive_link"
+      },
+      {
+        title: "Convolutional Neural Network",
+        category: "Model",
+        description: "merupakan arsitektur CNN yang digunakan untuk memahami cara kerja convolutional layer, pooling layer, dan proses ekstraksi fitur pada data gambar.",
+        image: "https://th.bing.com/th/id/OIP.AovBM3nLjKFL8SexWcYydAHaCd?w=334&h=116&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/1GfJDa8IY-O3r0MwDg-hQ8P3g3BVNhfwM/view?usp=sharing"
+      },
+      {
+        title: "Prediksi Harga Mobil",
+        category: "Prediction",
+        description: "memprediksi harga mobil berdasarkan fitur seperti tahun produksi, tipe kendaraan, kapasitas mesin, dan kondisi kendaraan menggunakan model regresi.",
+        image: "https://th.bing.com/th/id/OIP.Aow260ppzEzBwoBTBNn53wHaE7?w=272&h=181&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/1PMJJqy0cS1NYE1FYB7-LJ4vTt3Ulkckj/view?usp=sharing"
+      },
+      {
+        title: "LSTM project",
+        category: "Model",
+        description: "mempelajari arsitektur LSTM untuk memahami cara model deep learning memproses data sequential seperti teks atau time series.",
+        image: "https://th.bing.com/th/id/OIP.46vRqaIYX_HIdwpeDT9RdQHaEc?w=286&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/114JR1DrR9uEsQy7tfBK_dvMwIWk6gKta/view?usp=sharing"
+      }
+    ];
+
+
+    const MAX_PER_ROW = 5;
+
+    function buildCard(item) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `Open ${item.title}`);
+
+      card.innerHTML = `
+      <div class="card-img-wrap">
+        ${item.image
+          ? `<img src="${item.image}" alt="${item.title}" loading="lazy">`
+          : `<div class="card-img-placeholder">No Image</div>`}
+        <div class="card-overlay"></div>
+      </div>
+      <div class="card-body">
+        ${item.category ? `<div class="card-category">${item.category}</div>` : ''}
+        <div class="card-title">${item.title}</div>
+        <div class="card-desc">${item.description}</div>
+      </div>
+      <div class="card-arrow">
+        <svg viewBox="0 0 10 10">
+          <path d="M2 8 L8 2 M4 2 L8 2 L8 6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    `;
+
+      const navigate = () => {
+        if (item.link && item.link !== '#') {
+          window.open(item.link, '_blank', 'noopener');
+        }
+      };
+
+      card.addEventListener('click', navigate);
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(); }
+      });
+
+      return card;
+    }
+
+    function render() {
+      const container = document.getElementById('portfolioRows');
+      container.innerHTML = '';
+
+      if (!portfolios.length) {
+        container.innerHTML = '<p class="empty-state">No portfolio items yet.</p>';
+        return;
+      }
+
+      // Chunk into rows of MAX_PER_ROW
+      for (let i = 0; i < portfolios.length; i += MAX_PER_ROW) {
+        const chunk = portfolios.slice(i, i + MAX_PER_ROW);
+        const rowIndex = Math.floor(i / MAX_PER_ROW); // 0-based
+
+        const row = document.createElement('div');
+        row.className = `portfolio-row ${rowIndex % 2 === 0 ? 'row-up' : 'row-down'}`;
+
+        chunk.forEach(item => row.appendChild(buildCard(item)));
+        container.appendChild(row);
+      }
+    }
+
+    // Update project count automatically based on the portfolio array length
+    const projectCountElement = document.getElementById('project-count');
+    if (projectCountElement) projectCountElement.textContent = portfolios.length;
+
+    render();
+  </script>
+</body>
+
+</html>
