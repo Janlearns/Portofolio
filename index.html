@@ -310,6 +310,73 @@
       margin-bottom: 40px;
     }
 
+    .header-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px; /* Jarak antara ikon burger dan judul */
+    }
+    
+    /* ── Burger Menu ── */
+    .burger-menu {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .burger-icon {
+      background: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    
+    .burger-icon:hover {
+      background-color: #f0ebe5;
+      border-color: var(--border);
+    }
+    
+    .burger-icon svg {
+      stroke: var(--text-mid);
+    }
+    
+    .burger-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: var(--sidebar-bg);
+      min-width: 160px;
+      box-shadow: var(--card-hover-shadow);
+      z-index: 100;
+      border-radius: 8px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      margin-top: 6px;
+    }
+    
+    .burger-dropdown a {
+      color: var(--text-mid);
+      padding: 9px 12px;
+      text-decoration: none;
+      display: block;
+      font-size: 13px;
+      border-radius: 6px;
+      font-weight: 400;
+    }
+    
+    .burger-dropdown a:hover {
+      background-color: #f5f2ed;
+      color: var(--text-dark);
+    }
+    
+    .show {
+      display: block;
+    }
+
     .page-header h1 {
       font-family: 'DM Serif Display', serif;
       font-size: 28px;
@@ -734,15 +801,28 @@
         </svg>
         See My CV
       </a>
-
-      <p class="sidebar-footer">©2025 Rayzan Fazri Ramdany · All rights reserved</p>
   </aside>
 
   <!-- ── MAIN ── -->
   <main class="main">
     <div class="page-header">
-      <h1>Portfolio</h1>
-      <p>A collection of projects, experiments, and explorations.</p>
+      <div class="header-title-row">
+        <div class="burger-menu">
+          <button class="burger-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="burger-dropdown" id="burgerDropdown">
+            <a href="#" onclick="switchView('portfolio'); return false;">Portfolio</a>
+            <a href="#" onclick="switchView('learn'); return false;">Learn</a>
+          </div>
+        </div>
+        <h1 id="main-title">Portfolio</h1>
+      </div>
+      <p id="main-desc">A collection of projects, experiments, and explorations.</p>
     </div>
 
     <div class="portfolio-rows" id="portfolioRows"></div>
@@ -788,9 +868,40 @@
         description: "mempelajari arsitektur LSTM untuk memahami cara model deep learning memproses data sequential seperti teks atau time series.",
         image: "https://th.bing.com/th/id/OIP.46vRqaIYX_HIdwpeDT9RdQHaEc?w=286&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
         link: "https://drive.google.com/file/d/114JR1DrR9uEsQy7tfBK_dvMwIWk6gKta/preview"
+      },
+      {
+        title: "Deep Learning Project (DNN, CNN, RNN & LSTM)",
+        category: "Model",
+        description: "mempelajari berbagai jenis model deep learning seperti DNN, CNN, RNN, dan LSTM untuk memahami cara kerja dan aplikasi masing-masing model dalam berbagai jenis data.",
+        image: "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20230602113310/Neural-Networks-Architecture.png",
+        link: "https://drive.google.com/file/d/1t9fInIessxj3Mv6l9wGWpCKYi0-1y_iU/preview"
+      },
+      {
+        title: "Analysis Sentiment With Pytorch and Data dummy",
+        category: "Model",
+        description: "mempelajari analisis sentimen menggunakan PyTorch.",
+        image: "https://th.bing.com/th/id/OIP.xJ5Rk076M2suKRijzjDg9AAAAA?w=335&h=131&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+        link: "https://drive.google.com/file/d/1JpP5LqyjDJl1izgCrD77_TcGcWNSDNTk/preview"
       }
     ];
 
+    // Array baru untuk menampung daftar pembelajaran (seperti Python)
+    const learnItems = [
+      {
+        title: "Python Learning",
+        category: "Learning",
+        description: "Repositori tempat aku belajar dasar-dasar Python, struktur data, dan eksplorasi algoritma sederhana.",
+        image: "", 
+        link: "https://github.com/Janlearns"
+      },
+      {
+        title: "Pythorch",
+        category: "Learning(ongoing)",
+        description: "Repositori tempat aku belajar pythorch",
+        image: "", 
+        link: "https://github.com/Janlearns/belajar/tree/main/pytorch"
+      }
+    ];
 
     const MAX_PER_ROW = 5;
 
@@ -834,18 +945,18 @@
       return card;
     }
 
-    function render() {
+    function render(data = portfolios) {
       const container = document.getElementById('portfolioRows');
       container.innerHTML = '';
 
-      if (!portfolios.length) {
+      if (!data.length) {
         container.innerHTML = '<p class="empty-state">No portfolio items yet.</p>';
         return;
       }
 
       // Chunk into rows of MAX_PER_ROW
-      for (let i = 0; i < portfolios.length; i += MAX_PER_ROW) {
-        const chunk = portfolios.slice(i, i + MAX_PER_ROW);
+      for (let i = 0; i < data.length; i += MAX_PER_ROW) {
+        const chunk = data.slice(i, i + MAX_PER_ROW);
         const rowIndex = Math.floor(i / MAX_PER_ROW); // 0-based
 
         const row = document.createElement('div');
@@ -860,7 +971,40 @@
     const projectCountElement = document.getElementById('project-count');
     if (projectCountElement) projectCountElement.textContent = portfolios.length;
 
-    render();
+    render(portfolios);
+
+    // ── BURGER MENU LOGIC ──
+    function toggleMenu() {
+      document.getElementById('burgerDropdown').classList.toggle('show');
+    }
+
+    // Tutup dropdown jika mengklik area di luar menu
+    window.onclick = function(event) {
+      if (!event.target.closest('.burger-menu')) {
+        const dropdowns = document.getElementsByClassName("burger-dropdown");
+        for (let i = 0; i < dropdowns.length; i++) {
+          dropdowns[i].classList.remove('show');
+        }
+      }
+    }
+
+    function switchView(view) {
+      const titleEl = document.getElementById('main-title');
+      const descEl = document.getElementById('main-desc');
+      
+      if (view === 'portfolio') {
+        titleEl.textContent = 'Portfolio';
+        descEl.textContent = 'A collection of projects, experiments, and explorations.';
+        render(portfolios);
+      } else if (view === 'learn') {
+        titleEl.textContent = 'Learn';
+        descEl.textContent = 'A collection of my learning journey, codes, and notes.';
+        render(learnItems);
+      }
+      
+      // Sembunyikan dropdown setelah selesai memilih
+      document.getElementById('burgerDropdown').classList.remove('show');
+    }
   </script>
 </body>
 
