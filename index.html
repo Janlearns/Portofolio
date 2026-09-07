@@ -73,7 +73,8 @@
         <li><a href="#hero" class="sidebar-nav-link active"><span class="nav-num">01</span> Home</a></li>
         <li><a href="#about" class="sidebar-nav-link"><span class="nav-num">02</span> About</a></li>
         <li><a href="#portfolio" class="sidebar-nav-link"><span class="nav-num">03</span> Portfolio</a></li>
-        <li><a href="#contact" class="sidebar-nav-link"><span class="nav-num">04</span> Contact</a></li>
+        <li><a href="#education" class="sidebar-nav-link"><span class="nav-num">04</span> Education</a></li>
+        <li><a href="#contact" class="sidebar-nav-link"><span class="nav-num">05</span> Contact</a></li>
       </ul>
     </nav>
 
@@ -152,7 +153,7 @@
             <span class="stat-label">Projects</span>
           </div>
           <div class="stat-card">
-            <span class="stat-number">-</span>
+            <span class="stat-number">1</span>
             <span class="stat-label">Years</span>
           </div>
           <div class="stat-card">
@@ -173,10 +174,92 @@
       <div class="projects-list" id="projectsList"></div>
     </section>
 
+    <!-- ═══ EDUCATION ═══ -->
+    <section class="section" id="education">
+      <div class="section-header fade-in">
+        <div class="section-label">04 — Education</div>
+        <h2 class="section-title">EDUCATION</h2>
+        <p class="section-subtitle">Academic background and professional training.</p>
+      </div>
+      <div class="education-timeline">
+
+        <!-- Education Card 1: UNJANI -->
+        <div class="edu-card fade-in">
+          <div class="edu-card-accent"></div>
+          <div class="edu-card-content">
+            <div class="edu-card-header">
+              <div class="edu-card-meta">
+                <span class="edu-type-badge">Bachelor's Degree (S1)</span>
+                <span class="edu-period">Semester 7</span>
+              </div>
+              <h3 class="edu-institution">Universitas Jenderal Achmad Yani (UNJANI)</h3>
+              <p class="edu-program">Informatics</p>
+            </div>
+            <div class="edu-details">
+              <div class="edu-highlights">
+                <span class="edu-highlight-label">Relevant Coursework</span>
+                <div class="edu-tags">
+                  <span class="edu-tag">Cloud Computing</span>
+                  <span class="edu-tag">Object-Oriented Programming</span>
+                  <span class="edu-tag">Database</span>
+                  <span class="edu-tag">Project Management</span>
+                  <span class="edu-tag">Software Implementation</span>
+                  <span class="edu-tag">Multimedia</span>
+                  <span class="edu-tag">SOLID / Design Principles</span>
+                  <span class="edu-tag">Release Management</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Education Card 2: Dibimbing.id -->
+        <div class="edu-card fade-in">
+          <div class="edu-card-accent"></div>
+          <div class="edu-card-content">
+            <div class="edu-card-header">
+              <div class="edu-card-meta">
+                <span class="edu-type-badge">Professional Bootcamp</span>
+                <span class="edu-period">32 Weeks · ~23 hrs/week</span>
+              </div>
+              <h3 class="edu-institution">Dibimbing.id</h3>
+              <p class="edu-program">Data Science & AI Machine Learning Bootcamp — Batch 40</p>
+            </div>
+            <div class="edu-details">
+              <div class="edu-stats-row">
+                <div class="edu-stat">
+                  <span class="edu-stat-value">85.58</span>
+                  <span class="edu-stat-label">Overall Score</span>
+                </div>
+                <div class="edu-stat">
+                  <span class="edu-stat-value">
+                    <a href="https://dibimbing.id/certificate-validation?cn=201029DSML63062724" target="_blank"
+                      rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
+                      Certification
+                    </a>
+                  </span>
+                  <span class="edu-stat-label">Completion</span>
+                </div>
+              </div>
+              <div class="edu-highlights">
+                <span class="edu-highlight-label">Focus Areas</span>
+                <div class="edu-tags">
+                  <span class="edu-tag">Data Science</span>
+                  <span class="edu-tag">Machine Learning</span>
+                  <span class="edu-tag">Artificial Intelligence</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- ═══ CONTACT ═══ -->
     <section class="section" id="contact">
       <div class="section-header fade-in">
-        <div class="section-label">04 — Get In Touch</div>
+        <div class="section-label">05 — Get In Touch</div>
         <h2 class="section-title">CONTACT</h2>
         <p class="section-subtitle">Let's connect and build something amazing together.</p>
       </div>
@@ -313,7 +396,7 @@ renderProjects(portfolios);
 // ══════════════════════════════════════════════════════════
 // SIDEBAR SCROLL SPY — Active section indicator
 // ══════════════════════════════════════════════════════════
-const sectionIds = ['hero', 'about', 'portfolio', 'contact'];
+const sectionIds = ['hero', 'about', 'portfolio', 'education', 'contact'];
 const navLinks = document.querySelectorAll('.sidebar-nav-link');
 
 window.addEventListener('scroll', () => {
