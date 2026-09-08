@@ -1,0 +1,16 @@
+# Form dan server khusus lokal
+/admin.html
+/admin.css
+/admin.js
+/manage.py
+
+# Pengaturan editor dan cache Python
+/.vscode/
+__pycache__/
+*.py[cod]
+
+# File sementara
+/test.txt
+/projects.json.tmp
+.DS_Store
+Thumbs.db
