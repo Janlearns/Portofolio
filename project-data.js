@@ -11,6 +11,7 @@ window.ProjectData = {
     }
     if (!result.title || !result.description || !this.categories.includes(result.category)) throw new Error('Isi judul, kategori, dan deskripsi.');
     for (const key of ['image', 'link', 'githubLink']) {
+      if (key === 'image' && /^uploads\/[a-f0-9]{32}\.(jpg|png|webp)$/.test(result[key])) continue;
       if (result[key] && !['https:', 'http:'].includes(new URL(result[key]).protocol)) throw new Error('Link harus menggunakan https:// atau http://.');
     }
     return result;

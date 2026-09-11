@@ -2209,3 +2209,9 @@ section[id] { scroll-margin-top: 28px; }
   .carousel-dot, .carousel-dot.active { width: 12px; }
   .carousel-dot.active::after { width: 12px; }
 }
+
+/* Compact category control, using the existing editorial palette. */
+.category-filter { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.category-filter span { font: 10px var(--font-mono); letter-spacing: 1.5px; color: var(--text-secondary); }
+.category-filter select { width: min(100%, 280px); padding: 12px 36px 12px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg); color: var(--text); font: 12px var(--font-body); cursor: pointer; }
+.category-filter select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

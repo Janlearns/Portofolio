@@ -180,13 +180,7 @@
             <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg>
             <input type="text" id="projectSearchInput" placeholder="Search projects by keyword (e.g. PyTorch, CNN, XGBoost)..." aria-label="Search projects">
           </div>
-          <div class="filter-pills" id="filterPills">
-            <button class="filter-pill active" data-filter="all">All <span class="filter-badge" id="count-all">13</span></button>
-            <button class="filter-pill" data-filter="Prediction">Prediction <span class="filter-badge" id="count-Prediction">3</span></button>
-            <button class="filter-pill" data-filter="Model">Model <span class="filter-badge" id="count-Model">4</span></button>
-            <button class="filter-pill" data-filter="Chatbot">Chatbot & NLP <span class="filter-badge" id="count-Chatbot">4</span></button>
-            <button class="filter-pill" data-filter="RAG">RAG & RecSys <span class="filter-badge" id="count-RAG">2</span></button>
-          </div>
+          <label class="category-filter" for="categoryFilter"><span>CATEGORY</span><select id="categoryFilter" aria-label="Filter projects by category"></select></label>
         </div>
 
         <div class="results-toolbar">
@@ -452,11 +446,7 @@ function renderProjects() {
   wrapper.innerHTML = '';
 
   const filtered = portfolios.filter(item => {
-    const matchesFilter = (currentFilter === 'all') ||
-      (currentFilter === 'Prediction' && item.category === 'Prediction') ||
-      (currentFilter === 'Model' && item.category === 'Model') ||
-      (currentFilter === 'Chatbot' && (item.category === 'Chatbot' || item.category === 'NLP')) ||
-      (currentFilter === 'RAG' && (item.category === 'RAG' || item.category === 'Recommender System'));
+    const matchesFilter = currentFilter === 'all' || item.category === currentFilter;
 
     const query = currentQuery.toLowerCase().trim();
     const matchesSearch = !query ||
@@ -483,17 +473,17 @@ function renderProjects() {
     initOrUpdateSwiper();
   }
 
-  document.querySelectorAll('.filter-pill').forEach(button => {
-    const groups = { Prediction: ['Prediction'], Model: ['Model'], Chatbot: ['Chatbot', 'NLP'], RAG: ['RAG', 'Recommender System'] };
-    button.querySelector('.filter-badge').textContent = portfolios.filter(item => button.dataset.filter === 'all' || groups[button.dataset.filter].includes(item.category)).length;
-  });
+
+  categoryFilter.replaceChildren(...['all', ...ProjectData.categories].map(category => {
+    const count = portfolios.filter(item => category === 'all' || item.category === category).length;
+    return new Option(`${category === 'all' ? 'All categories' : category} (${count})`, category);
+  }));
+  categoryFilter.value = currentFilter;
   // Update counts
   document.getElementById('projectResults').textContent = `${filtered.length} of ${portfolios.length} projects`;
   document.getElementById('resetProjects').hidden = currentFilter === 'all' && !currentQuery;
   document.querySelector('.carousel-controls').hidden = filtered.length === 0;
-  document.querySelectorAll('.filter-pill').forEach(button => {
-    button.setAttribute('aria-pressed', String(button.dataset.filter === currentFilter));
-  });
+
   const countEl = document.getElementById('project-count');
   if (countEl) countEl.textContent = portfolios.length;
 }
@@ -568,15 +558,8 @@ function initOrUpdateSwiper() {
   }};
 }
 
-// Filter button click handlers
-document.querySelectorAll('.filter-pill').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.getAttribute('data-filter');
-    renderProjects();
-  });
-});
+const categoryFilter = document.getElementById('categoryFilter');
+categoryFilter.addEventListener('change', () => { currentFilter = categoryFilter.value; renderProjects(); });
 
 // Search input handler
 const searchInput = document.getElementById('projectSearchInput');
@@ -591,14 +574,12 @@ if (searchInput) {
 document.getElementById('resetProjects').addEventListener('click', () => {
   currentQuery = '';
   searchInput.value = '';
-  document.querySelector('[data-filter="all"]').click();
+  currentFilter = 'all';
+  renderProjects();
   searchInput.focus();
 });
 document.getElementById('skill-count').textContent = document.querySelectorAll('.skill-tag').length;
-document.querySelectorAll('.filter-pill').forEach(button => {
-  const groups = { Prediction: ['Prediction'], Model: ['Model'], Chatbot: ['Chatbot', 'NLP'], RAG: ['RAG', 'Recommender System'] };
-  button.querySelector('.filter-badge').textContent = portfolios.filter(item => button.dataset.filter === 'all' || groups[button.dataset.filter].includes(item.category)).length;
-});
+
 renderProjects();
 
 
