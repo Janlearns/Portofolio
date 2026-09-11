@@ -353,7 +353,7 @@
         <p class="modal-desc" id="modalDesc"></p>
         <div class="modal-actions">
           <a id="modalGithubLink" href="#" target="_blank" rel="noopener" class="btn-editorial btn-editorial--primary">GitHub Repository</a>
-          <a id="modalDemoLink" href="#" target="_blank" rel="noopener" class="btn-editorial btn-editorial--secondary">View Demo</a>
+          <a id="modalDemoLink" href="#" target="_blank" rel="noopener" class="btn-editorial btn-editorial--secondary">View Page</a>
         </div>
       </div>
     </div>
@@ -420,7 +420,7 @@ function buildProjectSlide(item, originalIndex) {
         <p class="card-desc">${item.description}</p>
         <div class="card-actions">
           ${item.githubLink ? `<a href="${item.githubLink}" class="card-link" target="_blank" rel="noopener" onclick="event.stopPropagation()">${ghIcon} GitHub</a>` : ''}
-          ${item.link && item.link !== '#' ? `<a href="${item.link}" class="card-link" target="_blank" rel="noopener" onclick="event.stopPropagation()">${arrowIcon} Demo</a>` : ''}
+          ${item.link && item.link !== '#' ? `<a href="${item.link}" class="card-link" target="_blank" rel="noopener" onclick="event.stopPropagation()">${arrowIcon} page</a>` : ''}
           <button class="card-link quick-view-btn" onclick="event.stopPropagation(); openProjectModal(${originalIndex})">✦ Quick View</button>
         </div>
       </div>
