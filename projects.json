@@ -1,5 +1,13 @@
 [
   {
+    "title": "Information Detection",
+    "category": "Prediction",
+    "description": "CekFakta adalah prototipe sistem pemeriksaan informasi berbasis bukti yang membantu pengguna menilai suatu klaim dengan mencari sumber di internet, membaca artikel terkait, dan membandingkan isi sumber dengan klaim menggunakan Natural Language Inference (NLI). Sistem juga mendukung OCR untuk membaca teks dari gambar serta dapat digunakan melalui aplikasi desktop dan ekstensi browser.",
+    "image": "https://plus.unsplash.com/premium_photo-1708598173837-f54121e75444?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "link": "https://drive.google.com/file/d/19zfylz4ljdqq2CR2gEG_f2JtAMOLUTg0/preview",
+    "githubLink": "https://github.com/Janlearns/Information-_detection"
+  },
+  {
     "title": "TokenScope",
     "category": "RAG",
     "description": "Proyek ini adalah aplikasi command-line AI content creator yang memanfaatkan API Groq untuk membantu menghasilkan ide produk, deskripsi, caption, tagline, dan konsep packaging. Aplikasi ini dibuat sebagai eksperimen untuk memahami integrasi Large Language Model (LLM), pengelolaan token, batas context window, parameter generasi, serta pencatatan hasil eksperimen.",
