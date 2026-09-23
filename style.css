@@ -627,10 +627,49 @@ body {
   margin-bottom: 16px;
 }
 
-.skills-grid {
+/* Skills Marquee */
+.skills-marquee {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+
+.marquee-row {
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-row--left .marquee-track {
+  animation: marqueeScrollLeft 25s linear infinite;
+}
+
+.marquee-row--right .marquee-track {
+  animation: marqueeScrollRight 30s linear infinite;
+}
+
+/* Pause on hover for interactivity */
+.skills-marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScrollLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marqueeScrollRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
 
 .skill-tag {
@@ -643,6 +682,8 @@ body {
   background: transparent;
   transition: all var(--transition);
   cursor: default;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .skill-tag:hover {
