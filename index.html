@@ -4,13 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rayzan Fazri Ramdany — Portfolio</title>
+    <script>
+      // Show the preloader once per session; never let it trap the page.
+      (function () {
+        var root = document.documentElement;
+        try {
+          if (
+            sessionStorage.getItem("introSeen") ||
+            matchMedia("(prefers-reduced-motion: reduce)").matches
+          )
+            return;
+          sessionStorage.setItem("introSeen", "1");
+        } catch (e) {}
+        root.classList.add("is-loading");
+        setTimeout(function () {
+          root.classList.remove("is-loading");
+        }, 7000);
+      })();
+    </script>
     <meta
       name="description"
       content="Portfolio of Rayzan Fazri Ramdany — Data Scientist, Machine Learning & AI Engineer"
     />
-    <link rel="stylesheet" href="style.css?v=marquee20260924" />
+    <link rel="stylesheet" href="style.css?v=cinematic3-20261026" />
   </head>
   <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <!-- ══ PRELOADER ══ -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+      <div class="preloader-top">
+        <span>Rayzan Fazri Ramdany</span><span>Portfolio — 2026</span>
+      </div>
+      <div class="preloader-bottom">
+        <span class="preloader-caption">Loading experience</span>
+        <span class="preloader-count" id="preloaderCount">000</span>
+      </div>
+      <span class="preloader-bar" id="preloaderBar"></span>
+    </div>
+
     <!-- ══ TOP SCROLL PROGRESS ══ -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -39,7 +71,7 @@
         <div class="sidebar-profile">
           <img
             class="sidebar-photo"
-            src="https://cdn.corenexis.com/f/wH8iHq3cHx1.jpeg"
+            src="https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_jpg/cloudinary-tools-uploads/uaiahb81ipy7qarrgkva"
             alt="Rayzan Fazri Ramdany"
           />
           <h2 class="sidebar-name">RAYZAN FAZRI RAMDANY</h2>
@@ -191,6 +223,13 @@
       <main class="main-content" role="main">
         <!-- ═══ HERO ═══ -->
         <section class="hero" id="hero">
+          <div class="hero-scene" id="heroScene" aria-hidden="true"></div>
+          <div class="hero-grid" aria-hidden="true"></div>
+          <div
+            class="floating-gallery"
+            id="floatingGallery"
+            aria-label="Featured projects"
+          ></div>
           <div class="hero-inner">
             <div class="hero-label fade-in">Portfolio</div>
             <div class="hero-badge fade-in">✦ Available for Opportunities</div>
@@ -343,6 +382,8 @@
                 id="projectSearchInput"
                 placeholder="Search projects by keyword (e.g. PyTorch, CNN, XGBoost)..."
                 aria-label="Search projects"
+                aria-keyshortcuts="/"
+                title="Press / to search"
               />
             </div>
             <label class="category-filter" for="categoryFilter"
@@ -523,6 +564,7 @@
 
         <!-- ═══ CONTACT ═══ -->
         <section class="section" id="contact">
+          <div class="contact-orb" aria-hidden="true"></div>
           <div class="section-header fade-in">
             <div class="section-label">05 — Get In Touch</div>
             <h2 class="section-title">CONTACT</h2>
@@ -585,7 +627,7 @@
                 <p>Janlearns</p>
               </div>
             </a>
-            <div class="contact-card">
+            <div class="contact-card copy-email-btn" title="Click to copy email">
               <div class="contact-icon">
                 <svg viewBox="0 0 16 16" fill="#666">
                   <path
@@ -669,6 +711,43 @@
               >View Page</a
             >
           </div>
+          <div class="modal-nav">
+            <button
+              class="carousel-nav-btn"
+              id="modalPrev"
+              aria-label="Previous project"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <path d="M10 12L4 8l6-4" />
+              </svg>
+            </button>
+            <span
+              class="carousel-position"
+              id="modalPosition"
+              aria-live="polite"
+            ></span>
+            <button
+              class="carousel-nav-btn"
+              id="modalNext"
+              aria-label="Next project"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <path d="M6 4l6 4-6 4" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -694,6 +773,9 @@
       </svg>
     </button>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="project-data.js"></script>
     <script>
       // ══════════════════════════════════════════════════════════
@@ -878,6 +960,17 @@
       let currentFilter = "all";
       let currentQuery = "";
       let projectSwiper = null;
+      let visibleIndices = [];
+
+      function matchesQuery(item, query) {
+        query = query.toLowerCase().trim();
+        return (
+          !query ||
+          item.title.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query) ||
+          item.category.toLowerCase().includes(query)
+        );
+      }
 
       function renderProjects() {
         const wrapper = document.getElementById("projectsSwiperWrapper");
@@ -888,19 +981,12 @@
         }
         wrapper.innerHTML = "";
 
-        const filtered = portfolios.filter((item) => {
-          const matchesFilter =
-            currentFilter === "all" || item.category === currentFilter;
-
-          const query = currentQuery.toLowerCase().trim();
-          const matchesSearch =
-            !query ||
-            item.title.toLowerCase().includes(query) ||
-            item.description.toLowerCase().includes(query) ||
-            item.category.toLowerCase().includes(query);
-
-          return matchesFilter && matchesSearch;
-        });
+        const filtered = portfolios.filter(
+          (item) =>
+            (currentFilter === "all" || item.category === currentFilter) &&
+            matchesQuery(item, currentQuery),
+        );
+        visibleIndices = filtered.map((item) => portfolios.indexOf(item));
 
         if (filtered.length === 0) {
           const empty = document.createElement("div");
@@ -1046,6 +1132,87 @@
           },
           { signal: events.signal },
         );
+
+        // Mouse drag to browse; a drag never counts as a card click.
+        let drag = null,
+          dragged = false;
+        track.addEventListener(
+          "pointerdown",
+          (event) => {
+            if (event.pointerType !== "mouse" || event.button !== 0) return;
+            drag = { x: event.clientX, left: track.scrollLeft };
+            dragged = false;
+          },
+          { signal: events.signal },
+        );
+        window.addEventListener(
+          "pointermove",
+          (event) => {
+            if (!drag) return;
+            const dx = event.clientX - drag.x;
+            if (!dragged && Math.abs(dx) < 6) return;
+            if (!dragged) {
+              dragged = true;
+              track.classList.add("is-dragging");
+            }
+            track.scrollLeft = drag.left - dx;
+          },
+          { signal: events.signal },
+        );
+        window.addEventListener(
+          "pointerup",
+          () => {
+            if (!drag) return;
+            drag = null;
+            if (dragged) {
+              track.classList.remove("is-dragging");
+              goTo(active);
+            }
+          },
+          { signal: events.signal },
+        );
+        track.addEventListener(
+          "click",
+          (event) => {
+            if (!dragged) return;
+            event.preventDefault();
+            event.stopPropagation();
+            dragged = false;
+          },
+          { capture: true, signal: events.signal },
+        );
+        track.addEventListener("dragstart", (event) => event.preventDefault(), {
+          signal: events.signal,
+        });
+
+        // Subtle 3D tilt that follows the cursor.
+        const canTilt = window.matchMedia(
+          "(hover: hover) and (prefers-reduced-motion: no-preference)",
+        );
+        track.addEventListener(
+          "pointermove",
+          (event) => {
+            const card = event.target.closest(".carousel-card");
+            if (!card || !canTilt.matches || drag) return;
+            const rect = card.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            card.classList.add("is-tilting");
+            card.style.setProperty("--tilt-x", `${(-y * 6).toFixed(2)}deg`);
+            card.style.setProperty("--tilt-y", `${(x * 6).toFixed(2)}deg`);
+          },
+          { passive: true, signal: events.signal },
+        );
+        track.addEventListener(
+          "pointerout",
+          (event) => {
+            const card = event.target.closest(".carousel-card");
+            if (card && !card.contains(event.relatedTarget))
+              card.classList.remove("is-tilting");
+          },
+          { signal: events.signal },
+        );
+
         track.scrollLeft = 0;
         const observer = new ResizeObserver(measure);
         observer.observe(track);
@@ -1084,10 +1251,77 @@
         renderProjects();
         searchInput.focus();
       });
-      document.getElementById("skill-count").textContent =
-        document.querySelectorAll(".skill-tag").length;
+      // "/" focuses search, Escape inside it clears the query.
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key !== "/" ||
+          event.target.closest("input, textarea, select") ||
+          projectModal.classList.contains("open")
+        )
+          return;
+        event.preventDefault();
+        searchInput.focus({ preventScroll: true });
+        searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && searchInput.value) {
+          searchInput.value = "";
+          currentQuery = "";
+          renderProjects();
+        }
+      });
+
+      // Skill tags: click one to see related projects.
+      const skillTags = [...document.querySelectorAll(".skill-tag")];
+      document.getElementById("skill-count").textContent = new Set(
+        skillTags.map((tag) => tag.textContent.trim()),
+      ).size;
+
+      function markSkillTags() {
+        document.querySelectorAll(".marquee-track").forEach((track) => {
+          const tags = [...track.children];
+          tags.forEach((tag, index) => {
+            const clickable = portfolios.some((item) =>
+              matchesQuery(item, tag.textContent),
+            );
+            const original = index < tags.length / 2;
+            tag.classList.toggle("is-clickable", clickable);
+            tag.title = clickable ? "See related projects" : "";
+            if (clickable && original) {
+              tag.setAttribute("role", "button");
+              tag.tabIndex = 0;
+            } else {
+              tag.removeAttribute("role");
+              tag.removeAttribute("tabindex");
+            }
+            if (!original) tag.setAttribute("aria-hidden", "true");
+          });
+        });
+      }
+
+      function filterBySkill(tag) {
+        if (!tag.classList.contains("is-clickable")) return;
+        currentQuery = tag.textContent.trim();
+        searchInput.value = currentQuery;
+        currentFilter = "all";
+        renderProjects();
+        document.getElementById("portfolio").scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+
+      skillTags.forEach((tag) => {
+        tag.addEventListener("click", () => filterBySkill(tag));
+        tag.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            filterBySkill(tag);
+          }
+        });
+      });
 
       renderProjects();
+      markSkillTags();
 
       // ══════════════════════════════════════════════════════════
       // QUICK VIEW MODAL LIGHTBOX
@@ -1100,12 +1334,29 @@
       const modalGithubLink = document.getElementById("modalGithubLink");
       const modalDemoLink = document.getElementById("modalDemoLink");
       const modalClose = document.getElementById("modalClose");
+      const modalPrev = document.getElementById("modalPrev");
+      const modalNext = document.getElementById("modalNext");
+      const modalPosition = document.getElementById("modalPosition");
       let modalTrigger = null;
+      let modalIndex = -1;
 
-      function openProjectModal(index) {
+      function stepProjectModal(direction) {
+        const position = visibleIndices.indexOf(modalIndex) + direction;
+        if (position < 0 || position >= visibleIndices.length) return;
+        showProject(visibleIndices[position]);
+      }
+
+      function showProject(index) {
         const item = portfolios[index];
-        if (!item) return;
-        modalTrigger = document.activeElement;
+        modalIndex = index;
+        const position = visibleIndices.indexOf(index);
+        modalPrev.disabled = position <= 0;
+        modalNext.disabled =
+          position === -1 || position >= visibleIndices.length - 1;
+        modalPosition.textContent =
+          position === -1
+            ? ""
+            : `${String(position + 1).padStart(2, "0")} / ${String(visibleIndices.length).padStart(2, "0")}`;
 
         modalImage.src = item.image || "";
         modalImage.alt = item.title;
@@ -1126,6 +1377,12 @@
         } else {
           modalDemoLink.style.display = "none";
         }
+      }
+
+      function openProjectModal(index) {
+        if (!portfolios[index]) return;
+        modalTrigger = document.activeElement;
+        showProject(index);
 
         projectModal.classList.add("open");
         projectModal.setAttribute("aria-hidden", "false");
@@ -1151,8 +1408,26 @@
         });
       }
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && projectModal.classList.contains("open"))
-          closeProjectModal();
+        if (!projectModal.classList.contains("open")) return;
+        if (e.key === "Escape") closeProjectModal();
+        if (e.key === "ArrowLeft") stepProjectModal(-1);
+        if (e.key === "ArrowRight") stepProjectModal(1);
+      });
+      modalPrev.addEventListener("click", () => stepProjectModal(-1));
+      modalNext.addEventListener("click", () => stepProjectModal(1));
+
+      // Swipe between projects on touch screens.
+      let touchStartX = null;
+      projectModal.addEventListener(
+        "touchstart",
+        (e) => (touchStartX = e.touches[0].clientX),
+        { passive: true },
+      );
+      projectModal.addEventListener("touchend", (e) => {
+        if (touchStartX === null) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        touchStartX = null;
+        if (Math.abs(dx) > 60) stepProjectModal(dx < 0 ? 1 : -1);
       });
 
       // ══════════════════════════════════════════════════════════
@@ -1428,6 +1703,7 @@
           const additions = items.map((item) => ProjectData.validate(item));
           portfolios.unshift(...additions);
           renderProjects();
+          markSkillTags();
         })
         .catch(() =>
           console.warn(
@@ -1435,5 +1711,6 @@
           ),
         );
     </script>
+    <script src="motion.js"></script>
   </body>
 </html>
