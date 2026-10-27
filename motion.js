@@ -337,7 +337,10 @@
   const heroChars = heroName ? splitChars(heroName) : [];
   const titleChars = [...document.querySelectorAll(".section-title")].map((title) => [title, splitChars(title)]);
   gsap.set(heroChars, { yPercent: 110 });
-  gsap.set(".hero-inner > *:not(.hero-name), .float-card, .hero-scroll-indicator", { opacity: 0 });
+  gsap.set(".hero-inner > *:not(.hero-name), .hero-scroll-indicator", { opacity: 0 });
+  const floatCards = gsap.utils.toArray(".float-card");
+  const floatTilt = [-13, 11, 16, 8, -14, -21];
+  gsap.set(floatCards, { opacity: 0, rotation: (i) => floatTilt[i], transformPerspective: 900 });
 
   function intro() {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -359,14 +362,60 @@
       )
       .add(() => document.querySelector(".hero-label") && scramble(document.querySelector(".hero-label"), 1000), 0.4)
       .fromTo(
-        ".float-card",
-        { opacity: 0, scale: 0.6, y: 60, rotate: () => gsap.utils.random(-30, 30) },
-        { opacity: 1, scale: 1, y: 0, rotate: 0, duration: 1.2, stagger: 0.09, ease: "expo.out", clearProps: "scale,y,rotate" },
+        floatCards,
+        { opacity: 0, scale: 0.6, y: 60, rotation: () => gsap.utils.random(-40, 40) },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          rotation: (i) => floatTilt[i],
+          duration: 1.4,
+          stagger: 0.09,
+          ease: "expo.out",
+          onComplete: startFloating,
+        },
         0.5,
       )
       .to(".hero-scroll-indicator", { opacity: 1, duration: 0.6 }, 1.2);
   }
   runPreloader(intro);
+
+  // Floating cards: GSAP owns every transform so tilt, bob and hover never fight.
+  function startFloating() {
+    floatCards.forEach((card, i) => {
+      // Gentle bob + slow 3D sway, each card on its own rhythm.
+      gsap.to(card, { y: -16, duration: 3.2 + i * 0.35, ease: "sine.inOut", yoyo: true, repeat: -1 });
+      gsap.fromTo(
+        card,
+        { rotationY: i % 2 ? -7 : 7, rotationX: i % 2 ? 4 : -4 },
+        {
+          rotationY: i % 2 ? 7 : -7,
+          rotationX: i % 2 ? -4 : 4,
+          duration: 5 + i * 0.6,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        },
+      );
+    });
+  }
+  floatCards.forEach((card, i) => {
+    card.addEventListener("mouseenter", () =>
+      gsap.to(card, { rotation: 0, scale: 1.1, yPercent: -6, duration: 0.6, ease: "power3.out", overwrite: "auto" }),
+    );
+    card.addEventListener("mouseleave", () =>
+      gsap.to(card, { rotation: floatTilt[i], scale: 1, yPercent: 0, duration: 0.8, ease: "power3.out", overwrite: "auto" }),
+    );
+  });
+  // Cards drift with the cursor; nearer cards (higher index % 3) move more.
+  if (finePointer && floatCards.length) {
+    const drift = floatCards.map((card) => gsap.quickTo(card, "x", { duration: 1.2, ease: "power3.out" }));
+    hero.addEventListener("mousemove", (e) => {
+      const offset = e.clientX / window.innerWidth - 0.5;
+      drift.forEach((move, i) => move(offset * ((i % 3) + 1) * 18));
+    });
+    hero.addEventListener("mouseleave", () => drift.forEach((move) => move(0)));
+  }
 
   // Hero name follows the mouse with depth per line.
   if (finePointer && heroName) {

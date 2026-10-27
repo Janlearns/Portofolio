@@ -2327,8 +2327,14 @@ section[id] { scroll-margin-top: 28px; }
   overflow: hidden;
   cursor: pointer;
   pointer-events: auto;
-  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
-  animation: floatCard 7s ease-in-out infinite;
+  transition: border-color 0.3s, box-shadow 0.4s;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+/* CSS fallback when GSAP is unavailable; otherwise GSAP drives all card motion. */
+html:not(.has-gsap) .float-card {
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, box-shadow 0.4s;
+  animation: floatCard 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 .float-card img {
   width: 100%;
@@ -2348,9 +2354,10 @@ section[id] { scroll-margin-top: 28px; }
 .float-card:hover {
   z-index: 9;
   border-color: var(--text);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.22);
-  transform: translateY(-12px) rotate(0deg) scale(1.06) !important;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
 }
+html:not(.has-gsap) .float-card:hover { transform: translateY(-12px) rotate(0deg) scale(1.06) !important; }
+.floating-gallery:hover .float-card:not(:hover) img { opacity: 0.35; }
 .float-card:hover img { transform: scale(1.08); filter: none; opacity: 1; }
 .float-card-index, .float-card-label {
   position: absolute;
@@ -2370,8 +2377,8 @@ section[id] { scroll-margin-top: 28px; }
 .float-card--5 { left: 50%; top: 68%; transform: rotate(-14deg); animation-delay: -5s; }
 .float-card--6 { left: 0; top: 66%; transform: rotate(-21deg); animation-delay: -0.5s; }
 @keyframes floatCard {
-  0%, 100% { margin-top: 0; }
-  50% { margin-top: -13px; }
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -14px; }
 }
 @media (max-width: 1200px) { .floating-gallery { display: none; } }
 
@@ -2503,3 +2510,7 @@ section[id] { scroll-margin-top: 28px; }
 .has-gsap .section-label.is-drawn::after { transform: scaleX(1); }
 
 .skills-marquee { will-change: transform; }
+
+/* Hero text box must not block clicks on the floating cards behind it. */
+.hero-inner, .hero-inner * { pointer-events: none; }
+.hero-inner a, .hero-inner button, .hero-name .split-char { pointer-events: auto; }
